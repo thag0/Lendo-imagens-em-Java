@@ -4,18 +4,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 class Main{
    public static void main(String[] args){
       limparConsole();
-      LeitorImagem leitorImagem = new LeitorImagem();
+      GerenciadorImagem gi = new GerenciadorImagem();
 
-      ArrayList<BufferedImage> imagens = new ArrayList<>();
-      for(int i = 0; i < 10; i++){
-         imagens.add(leitorImagem.lerImagem("./image/" + i + ".png"));
-      }
+      BufferedImage imagemLida = gi.lerImagem("./meme.png");
+      ArrayList<ArrayList<Integer[]>> imagemRGB = gi.gerarEstruturaImagem(imagemLida);
 
-      double[][] dados = imagemParaDados(imagens.get(1), leitorImagem);
-      matrizParaCSV(dados, "teste.csv");
+      gi.exportarImagemPng("./dados/imagem", imagemRGB);
    }
 
    public static void limparConsole(){
@@ -36,7 +34,7 @@ class Main{
    }
 
 
-   public static double[][] imagemParaDados(BufferedImage imagem, LeitorImagem leitorImagem){
+   public static double[][] imagemParaDados(BufferedImage imagem, GerenciadorImagem leitorImagem){
       double[][] dados = new double[imagem.getHeight()][imagem.getWidth()];
 
       int soma;
@@ -77,7 +75,7 @@ class Main{
          }
 
          writer.close();
-         System.out.println("Arquivo CSV criado com sucesso!");
+         System.out.println("Arquivo CSV criado com sucesso.");
       
       }catch(IOException e){
          System.err.println("Erro ao escrever no arquivo: " + e.getMessage());
@@ -95,7 +93,7 @@ class Main{
    }
 
 
-   public static void printImagem(BufferedImage imagem, LeitorImagem leitorImagem){
+   public static void printImagem(BufferedImage imagem, GerenciadorImagem leitorImagem){
       for(int y = 0; y < imagem.getHeight(); y++){
          for(int x = 0; x < imagem.getWidth(); x++){
             
